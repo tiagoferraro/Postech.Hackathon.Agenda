@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Postech.Hackathon.Agenda.Domain\Postech.Hackathon.Agenda.Domain.csproj" />
+    <ProjectReference Include="..\Postech.Hackathon.Agenda.Infra\Postech.Hackathon.Agenda.Infra.csproj" />
+  </ItemGroup>
+
 </Project>
