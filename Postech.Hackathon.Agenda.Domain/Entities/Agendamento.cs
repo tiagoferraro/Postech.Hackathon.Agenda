@@ -1,4 +1,3 @@
-using System;
 using Postech.Hackathon.Agenda.Domain.Enums;
 
 namespace Postech.Hackathon.Agenda.Domain.Entities;
@@ -9,7 +8,7 @@ public class Agendamento
     public Guid MedicoId { get; private set; }
     public Guid PacienteId { get; private set; }
     public DateTime DataHoraConsulta { get; private set; }
-    public StatusConsultaEnum StatusConsulta { get; private set; }
+    public StatusAgendamento StatusConsulta { get; private set; }
     public string? JustificativaCancelamento { get; private set; }
 
     //dapper
@@ -20,17 +19,17 @@ public class Agendamento
         MedicoId = medicoId;
         PacienteId = pacienteId;
         DataHoraConsulta = dataHoraConsulta;
-        StatusConsulta = StatusConsultaEnum.AguardandoAprovacaoMedico;        
+        StatusConsulta = StatusAgendamento.AguardandoAprovacaoMedico;        
     }
     public void RecusarConsulta(string justificativa)
     {
-        if (StatusConsulta != StatusConsultaEnum.Aprovado)
+        if (StatusConsulta != StatusAgendamento.Aprovado)
         {
             throw new InvalidOperationException("A consulta não pode ser recusada, pois já foi aprovada.");
         }
 
         JustificativaCancelamento = justificativa;
-        StatusConsulta = StatusConsultaEnum.Recusado;
+        StatusConsulta = StatusAgendamento.Recusado;
     }
     public void AprovarConsulta()
     {
@@ -39,11 +38,11 @@ public class Agendamento
             throw new InvalidOperationException("A consulta não pode ser aprovada, pois a data e hora já passaram.");
         }
         
-        if (StatusConsulta != StatusConsultaEnum.AguardandoAprovacaoMedico)
+        if (StatusConsulta != StatusAgendamento.AguardandoAprovacaoMedico)
         {
             throw new InvalidOperationException("A consulta não pode ser aprovada, pois não está aguardando aprovação do médico.");
         }
 
-        StatusConsulta = StatusConsultaEnum.Aprovado;
+        StatusConsulta = StatusAgendamento.Aprovado;
     }
 }

@@ -9,28 +9,32 @@ namespace Postech.Hackathon.Agenda.Infra.Repositories;
 public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings) : IAgendamentoRepository
 {
 
-    public async Task<Agendamento?> ObterPorIdAsync(Guid id)
+    public async Task<Agendamento> ObterPorIdAsync(Guid id)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
         const string sql = "SELECT * FROM dbo.Agendamento WHERE IdAgendamento = @Id";
-        return await connection.QueryFirstOrDefaultAsync<Agendamento>(sql, new { Id = id });
+        
+        var agendamento = await connection.QueryFirstOrDefaultAsync<Agendamento>(sql, new { Id = id });
+
+        if (agendamento != null)
+        {
+            return agendamento;
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Agendamento com ID {id} não encontrado.");
+        }
     }
 
-    public async Task<IEnumerable<Agendamento>> ObterTodosAsync()
-    {
-        using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "SELECT * FROM dbo.Agendamento";
-        return await connection.QueryAsync<Agendamento>(sql);
-    }
 
-    public async Task<IEnumerable<Agendamento>> ObterPorMedicoAsync(Guid medicoId)
+    public async Task<IEnumerable<Agendamento>> ObterPorMedicoAsync(Guid medicoId,DateTime dataInicial,DateTime datafinal)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
         const string sql = "SELECT * FROM dbo.Agendamento WHERE MedicoId = @MedicoId";
         return await connection.QueryAsync<Agendamento>(sql, new { MedicoId = medicoId });
     }
 
-    public async Task<IEnumerable<Agendamento>> ObterPorPacienteAsync(Guid pacienteId)
+    public async Task<IEnumerable<Agendamento>> ObterPorPacienteAsync(Guid pacienteId, DateTime dataInicial, DateTime datafinal)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
         const string sql = "SELECT * FROM dbo.Agendamento WHERE PacienteId = @PacienteId";
@@ -63,11 +67,5 @@ public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings)
         return rows > 0;
     }
 
-    public async Task<bool> DeletarAsync(Guid id)
-    {
-        using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "DELETE FROM dbo.Agendamento WHERE IdAgendamento = @Id";
-        var rows = await connection.ExecuteAsync(sql, new { Id = id });
-        return rows > 0;
-    }
+ 
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace Postech.Hackathon.Agenda.Domain.Entities;
 
 public class HorarioDisponivel

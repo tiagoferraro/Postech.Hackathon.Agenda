@@ -1,10 +1,23 @@
-using System;
+using Postech.Hackathon.Agenda.Domain.Entities;
 
 namespace Postech.Hackathon.Agenda.Application.DTOs;
 
-public record HorarioDisponivelDto(
-    Guid IdHorarioDisponivel,
-    Guid MedicoId,
-    int DiaSemana,
-    TimeSpan Horas
-); 
+public class HorarioDisponivelDto
+{
+    public Guid IdHorarioDisponivel { get; set; }
+    public Guid MedicoId { get; set; }
+    public int DiaSemana { get; set; }
+    public TimeSpan Horas { get; set; }
+    public static HorarioDisponivelDto MapToDto(HorarioDisponivel horario)
+    {
+        return new HorarioDisponivelDto()
+        {
+            IdHorarioDisponivel = horario.IdHorarioDisponivel,
+            MedicoId = horario.MedicoId,
+            DiaSemana = horario.DiaSemana,
+            Horas = horario.Horas
+        };
+    }
+}
+
+

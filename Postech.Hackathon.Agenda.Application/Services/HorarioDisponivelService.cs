@@ -16,37 +16,22 @@ public class HorarioDisponivelService(IHorarioDisponivelRepository _horarioDispo
             throw new InvalidOperationException("Já existe um horário cadastrado para este médico no mesmo dia e horário.");
         }
 
-        var horario = new HorarioDisponivel(Guid.NewGuid(), dto.MedicoId, dto.DiaSemana, dto.Horas);
-        var operacaoRealizada = await _horarioDisponivelRepository.InserirAsync(horario);
+        var horarioDisponivel = new HorarioDisponivel(Guid.NewGuid(), dto.MedicoId, dto.DiaSemana, dto.Horas);
+        var operacaoRealizada = await _horarioDisponivelRepository.InserirAsync(horarioDisponivel);
 
         if (!operacaoRealizada)
         {
             throw new InvalidOperationException("Erro ao criar horário disponível.");
         }
 
-        return new HorarioDisponivelDto
-        (
-            IdHorarioDisponivel: horario.IdHorarioDisponivel,
-            MedicoId: horario.MedicoId,
-            DiaSemana: horario.DiaSemana,
-            Horas: horario.Horas
-        );
+        return HorarioDisponivelDto.MapToDto(horarioDisponivel);        
     }
 
     public async Task<IEnumerable<HorarioDisponivelDto>> ObterHorariosPorMedicoAsync(Guid medicoId)
     {
         var listaHorairos = await _horarioDisponivelRepository
             .ObterPorMedicoAsync(medicoId);
-        return listaHorairos.Select(h => MapToDto(h));
+        return listaHorairos.Select(h => HorarioDisponivelDto.MapToDto(h));
     }
-    private static HorarioDisponivelDto MapToDto(HorarioDisponivel horario)
-    {
-        return new HorarioDisponivelDto
-        (
-            IdHorarioDisponivel: horario.IdHorarioDisponivel,
-            MedicoId: horario.MedicoId,
-            DiaSemana: horario.DiaSemana,
-            Horas: horario.Horas
-        );
-    }
+   
 }
