@@ -69,12 +69,11 @@ public static class SwaggerConfiguration
     public static WebApplication MapOpenApi(this WebApplication app)
     {
         app.UseSwagger();
-        app.UseSwaggerUI(options =>
+        app.UseSwaggerUI(c => 
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Postech Hackathon GestorCadastro API v1");
-            options.RoutePrefix = string.Empty; // Para servir a UI do Swagger na raiz
-            options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.None);
-            options.DefaultModelsExpandDepth(-1); // Oculta a seção de modelos por padrão
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Postech Hackathon GestorCadastro API v1");
+            c.RoutePrefix = string.Empty;
+            c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
         });
 
         return app;
@@ -112,10 +111,21 @@ public class SecurityRequirementsOperationFilter : IOperationFilter
                     }
             ];
 
-            // Adiciona um ícone de cadeado na descrição
+            // Obtém as roles do atributo [Authorize]
+            var roles = authAttributes
+                .SelectMany(a => a.Roles?.Split(',') ?? Array.Empty<string>())
+                .Where(r => !string.IsNullOrEmpty(r))
+                .Distinct()
+                .ToList();
+
+            var rolesDescription = roles.Any() 
+                ? $"Roles permitidas: {string.Join(", ", roles)}" 
+                : "Requer autenticação";
+
+            // Adiciona um ícone de cadeado e as roles na descrição
             operation.Description = string.IsNullOrEmpty(operation.Description)
-                ? "🔒 Endpoint protegido - Requer autenticação"
-                : $"🔒 Endpoint protegido - Requer autenticação\n{operation.Description}";
+                ? $"🔒 Endpoint protegido - {rolesDescription}"
+                : $"🔒 Endpoint protegido - {rolesDescription}\n{operation.Description}";
         }
         else
         {
@@ -125,6 +135,5 @@ public class SecurityRequirementsOperationFilter : IOperationFilter
                 : $"🔓 Endpoint público - Não requer autenticação\n{operation.Description}";
         }
     }
-
 }
 
