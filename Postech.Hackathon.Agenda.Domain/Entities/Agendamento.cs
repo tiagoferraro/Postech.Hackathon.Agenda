@@ -21,6 +21,7 @@ public class Agendamento
         DataHoraConsulta = dataHoraConsulta;
         StatusConsulta = StatusAgendamento.AguardandoAprovacaoMedico;        
     }
+    
     public void RecusarConsulta(string justificativa)
     {
         if (StatusConsulta != StatusAgendamento.Aprovado)

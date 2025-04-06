@@ -8,6 +8,8 @@ namespace Postech.Hackathon.Agenda.Application.Services;
 
 public class HorarioDisponivelService(IHorarioDisponivelRepository _horarioDisponivelRepository) : IHorarioDisponivelService
 {
+   
+
     public async Task<HorarioDisponivelDto> CriarHorarioDisponivelAsync(HorarioDisponivelDto dto)
     {
         var horarioExistente = await _horarioDisponivelRepository.ExisteHorarioAsync(dto.MedicoId, dto.DiaSemana, dto.Horas);
@@ -25,6 +27,26 @@ public class HorarioDisponivelService(IHorarioDisponivelRepository _horarioDispo
         }
 
         return HorarioDisponivelDto.MapToDto(horarioDisponivel);        
+    }
+
+    public async Task AlterarHorarioDisponivelAsync(HorarioDisponivelDto dto)
+    {
+        var horarioDisponivel = await _horarioDisponivelRepository.ObterPorIdAsync(dto.IdHorarioDisponivel)
+            ?? throw new InvalidOperationException("Horário disponível não encontrado.");
+
+        var horarioExistente = await _horarioDisponivelRepository.ExisteHorarioAsync(dto.MedicoId, dto.DiaSemana, dto.Horas);
+        if (horarioExistente)
+        {
+            throw new InvalidOperationException("Já existe um horário cadastrado para este médico no mesmo dia e horário.");
+        }
+
+        horarioDisponivel.AtualizarHorario(dto.DiaSemana, dto.Horas);
+        var operacaoRealizada = await _horarioDisponivelRepository.AtualizarAsync(horarioDisponivel);
+        if (!operacaoRealizada)
+        {
+            throw new InvalidOperationException("Erro ao atualizar horário disponível.");
+        }
+
     }
 
     public async Task<IEnumerable<HorarioDisponivelDto>> ObterHorariosPorMedicoAsync(Guid medicoId)

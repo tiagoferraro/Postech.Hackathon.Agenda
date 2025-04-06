@@ -26,6 +26,22 @@ public class HorarioDisponivelController(HorarioDisponivelService _horarioDispon
             return BadRequest(ex.Message);
         }
     }
+    [HttpPut]
+    [ProducesResponseType(typeof(HorarioDisponivelDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<HorarioDisponivelDto>> AlterarHorarioDisponivel([FromBody] HorarioDisponivelDto dto)
+    {
+        try
+        {
+             await _horarioDisponivelService.AlterarHorarioDisponivelAsync(dto);
+            return NoContent();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     [HttpGet("obterhorariospormedico/{medicoId}")]
     [ProducesResponseType(typeof(IEnumerable<HorarioDisponivelDto>), StatusCodes.Status200OK)]
@@ -36,4 +52,5 @@ public class HorarioDisponivelController(HorarioDisponivelService _horarioDispon
         var horarios = await _horarioDisponivelService.ObterHorariosPorMedicoAsync(medicoId);
         return Ok(horarios);
     }
+
 } 

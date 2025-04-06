@@ -4,7 +4,7 @@ namespace Postech.Hackathon.Agenda.Infra.Interfaces
 {
     public interface IHorarioDisponivelRepository
     {
-        Task<HorarioDisponivel?> ObterPorIdAsync(Guid id);
+        Task<HorarioDisponivel> ObterPorIdAsync(Guid id);
         Task<IEnumerable<HorarioDisponivel>> ObterTodosAsync();
         Task<IEnumerable<HorarioDisponivel>> ObterPorMedicoAsync(Guid medicoId);
         Task<IEnumerable<HorarioDisponivel>> ObterPorDiaSemanaAsync(int diaSemana);

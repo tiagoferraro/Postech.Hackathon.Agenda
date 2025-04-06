@@ -8,20 +8,30 @@ public class HorarioDisponivel
     public TimeSpan Horas { get; private set; }
 
     public HorarioDisponivel(Guid idHorarioDisponivel, Guid medicoId, int diaSemana, TimeSpan horas)
-    {
-        if (diaSemana < 1 || diaSemana > 7)
-        {
-            throw new ArgumentException("O dia da semana deve estar entre 1 e 7.", nameof(diaSemana));
-        }
-
-        if (horas.Minutes % 30 != 0)
-        {
-            throw new ArgumentException("O horário deve ser em intervalos de 30 minutos.", nameof(horas));
-        }
-
+    {      
         IdHorarioDisponivel = idHorarioDisponivel;
         MedicoId = medicoId;
         DiaSemana = diaSemana;
         Horas = horas;
+
+        Validar();
+    }
+    public void AtualizarHorario(int diaSemana,TimeSpan horas)
+    {
+        DiaSemana = diaSemana;
+        Horas = horas;
+        Validar();
+    }
+    private void Validar()
+    {
+        if (DiaSemana < 1 || DiaSemana > 7)
+        {
+            throw new ArgumentException("O dia da semana deve estar entre 1 e 7.");
+        }
+
+        if (Horas.Minutes % 30 != 0)
+        {
+            throw new ArgumentException("O horário deve ser em intervalos de 30 minutos.");
+        }
     }
 }

@@ -16,14 +16,8 @@ public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings)
         
         var agendamento = await connection.QueryFirstOrDefaultAsync<Agendamento>(sql, new { Id = id });
 
-        if (agendamento != null)
-        {
-            return agendamento;
-        }
-        else
-        {
-            throw new KeyNotFoundException($"Agendamento com ID {id} não encontrado.");
-        }
+        return agendamento ?? throw new KeyNotFoundException($"Agendamento com ID {id} não encontrado.");
+
     }
 
 
