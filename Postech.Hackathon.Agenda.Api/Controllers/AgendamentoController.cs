@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Postech.Hackathon.Agenda.Api.Models;
-using Postech.Hackathon.Agenda.Application.Dtos;
 using Postech.Hackathon.Agenda.Application.DTOs.Request;
+using Postech.Hackathon.Agenda.Application.DTOs.Response;
 using Postech.Hackathon.Agenda.Application.Interfaces;
 
 
@@ -14,10 +14,10 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
 {
     [HttpGet("{agendamentoId}")]
     [Authorize]
-    [ProducesResponseType(typeof(AgendamentoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(AgendamentoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<AgendamentoDto>> ObterPorId(Guid agendamentoId)
+    public async Task<ActionResult<AgendamentoResponse>> ObterPorId(Guid agendamentoId)
     {
         var agendamento = await _agendamentoService.ObterPorIdAsync(agendamentoId);
         return Ok(agendamento);
@@ -25,21 +25,21 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
 
     [HttpPost]
     [Authorize(Roles = "Medico,Administrador")]
-    [ProducesResponseType(typeof(AgendamentoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(AgendamentoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<AgendamentoDto>> Criar([FromBody] AgendamentoRequest dto)
+    public async Task<ActionResult<AgendamentoResponse>> Criar([FromBody] AgendamentoRequest dto)
     {
         var agendamento = await _agendamentoService.CriarAsync(dto);
-        return CreatedAtAction(nameof(ObterPorId), new { id = agendamento.IdAgendamento }, agendamento);
+        return CreatedAtAction(nameof(ObterPorId), new { agendamentoId = agendamento.AgendamentoId }, agendamento);
     }
 
-    [HttpPost("oberpormedico")]
+    [HttpPost("obterpormedico")]
     [Authorize]
-    [ProducesResponseType(typeof(IEnumerable<AgendamentoDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(IEnumerable<AgendamentoResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType( StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<AgendamentoDto>>> ObterPorMedico([FromBody] AgendamentoFiltroRequest agendamentoFiltroRequest)
+    public async Task<ActionResult<IEnumerable<AgendamentoResponse>>> ObterPorMedico([FromBody] AgendamentoFiltroRequest agendamentoFiltroRequest)
     {
         var agendamentos = await _agendamentoService.ObterPorMedicoAsync(agendamentoFiltroRequest);
         return Ok(agendamentos);
@@ -47,10 +47,10 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
 
     [HttpPost("obterporpaciente")]    
     [Authorize(Roles = "Paciente,Administrador")]
-    [ProducesResponseType(typeof(IEnumerable<AgendamentoDto>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(IEnumerable<AgendamentoResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType( StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<IEnumerable<AgendamentoDto>>> ObterPorPaciente([FromBody] AgendamentoFiltroRequest agendamentoFiltroRequest)
+    public async Task<ActionResult<IEnumerable<AgendamentoResponse>>> ObterPorPaciente([FromBody] AgendamentoFiltroRequest agendamentoFiltroRequest)
     {
         var agendamentos = await _agendamentoService.ObterPorPacienteAsync(agendamentoFiltroRequest);
         return Ok(agendamentos);
@@ -58,10 +58,10 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
 
     [HttpPost("recusar")]
     [Authorize(Roles = "Medico,Administrador")]
-    [ProducesResponseType(typeof(AgendamentoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(AgendamentoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType( StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<AgendamentoDto>> Recusar([FromBody] AgendamentoRecusaRequest agendamentoFiltroRequest)
+    public async Task<ActionResult<AgendamentoResponse>> Recusar([FromBody] AgendamentoRecusaRequest agendamentoFiltroRequest)
     {
         await _agendamentoService.RecusarAsync(agendamentoFiltroRequest);
         return Ok();
@@ -70,10 +70,10 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
     [HttpPost("aprovar")]
     [Authorize(Roles = "Medico,Administrador")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(AgendamentoDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(AgendamentoResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<AgendamentoDto>> Aprovar([FromBody] AgendamentoAprovarRequest agendamentoAprovarRequest)
+    public async Task<ActionResult<AgendamentoResponse>> Aprovar([FromBody] AgendamentoAprovarRequest agendamentoAprovarRequest)
     {
         await _agendamentoService.AprovarAsync(agendamentoAprovarRequest);
         return Ok();

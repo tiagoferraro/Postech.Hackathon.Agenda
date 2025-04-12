@@ -2,6 +2,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
 using Postech.Hackathon.Agenda.Domain.Entities;
+using Postech.Hackathon.Agenda.Domain.Enums;
 using Postech.Hackathon.Agenda.Infra.Interfaces;
 
 namespace Postech.Hackathon.Agenda.Infra.Repositories;
@@ -12,11 +13,11 @@ public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings)
     public async Task<Agendamento> ObterPorIdAsync(Guid id)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "SELECT * FROM dbo.Agendamento WHERE IdAgendamento = @Id";
+        const string sql = "SELECT * FROM dbo.Agendamento WHERE AgendamentoId = @AgendamentoId";
         
-        var agendamento = await connection.QueryFirstOrDefaultAsync<Agendamento>(sql, new { Id = id });
+        var agendamento = await connection.QueryFirstOrDefaultAsync<Agendamento>(sql, new { AgendamentoId = id });
 
-        return agendamento ?? throw new KeyNotFoundException($"Agendamento com ID {id} n„o encontrado.");
+        return agendamento ?? throw new KeyNotFoundException($"Agendamento com ID {id} n√£o encontrado.");
 
     }
 
@@ -39,8 +40,10 @@ public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
         const string sql = @"INSERT INTO dbo.Agendamento 
-                               (IdAgendamento, MedicoId, PacienteId, DataHoraConsulta, StatusConsulta, JustificativaCancelamento) 
-                               VALUES (@IdAgendamento, @MedicoId, @PacienteId, @DataHoraConsulta, @StatusConsulta, @JustificativaCancelamento)";
+                               (AgendamentoId, MedicoId, PacienteId, DataHoraConsulta, StatusConsulta, 
+                                JustificativaCancelamento, DataCadastro) 
+                               VALUES (@AgendamentoId, @MedicoId, @PacienteId, @DataHoraConsulta, @StatusConsulta, 
+                                      @JustificativaCancelamento, @DataCadastro)";
 
         var rows = await connection.ExecuteAsync(sql, agendamento);
         return rows > 0;
@@ -54,12 +57,31 @@ public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings)
                                    PacienteId = @PacienteId, 
                                    DataHoraConsulta = @DataHoraConsulta, 
                                    StatusConsulta = @StatusConsulta, 
-                                   JustificativaCancelamento = @JustificativaCancelamento 
-                               WHERE IdAgendamento = @IdAgendamento";
+                                   JustificativaCancelamento = @JustificativaCancelamento,
+                                   DataAlteracao = @DataAlteracao
+                               WHERE AgendamentoId = @AgendamentoId";
 
         var rows = await connection.ExecuteAsync(sql, agendamento);
         return rows > 0;
     }
 
- 
+    public async Task<bool> ExisteAgendamentoPorDataEMedicoAsync(DateTime dataHoraConsulta, Guid medicoId)
+    {
+        using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
+        var sql = @"SELECT COUNT(1) 
+                    FROM dbo.Agendamento 
+                    WHERE MedicoId = @MedicoId 
+                    AND DataHoraConsulta = @DataHoraConsulta
+                    AND StatusConsulta != @StatusRecusado";
+
+        var count = await connection.ExecuteScalarAsync<int>(sql, new
+        {
+            MedicoId = medicoId,
+            DataHoraConsulta = dataHoraConsulta,
+            StatusRecusado = StatusAgendamento.Recusado
+        });
+
+        return count > 0;
+    }
+
 }

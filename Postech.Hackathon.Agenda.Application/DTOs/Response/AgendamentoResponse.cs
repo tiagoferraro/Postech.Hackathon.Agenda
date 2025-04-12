@@ -1,22 +1,22 @@
 using Postech.Hackathon.Agenda.Domain.Entities;
 using Postech.Hackathon.Agenda.Domain.Enums;
 
-namespace Postech.Hackathon.Agenda.Application.Dtos;
+namespace Postech.Hackathon.Agenda.Application.DTOs.Response;
 
-public class AgendamentoDto
+public class AgendamentoResponse
 {
-    public Guid IdAgendamento { get; set; }
+    public Guid AgendamentoId { get; set; }
     public Guid MedicoId { get; set; }
     public Guid PacienteId { get; set; }
     public DateTime DataHoraConsulta { get; set; }
     public StatusAgendamento StatusConsulta { get; set; }
     public string? JustificativaCancelamento { get; set; }
 
-    public static AgendamentoDto MapToDto(Agendamento agendamento)
+    public static AgendamentoResponse MapToDto(Agendamento agendamento)
     {
-        return new AgendamentoDto
+        return new AgendamentoResponse
         {
-            IdAgendamento = agendamento.IdAgendamento,
+            AgendamentoId = agendamento.AgendamentoId,
             MedicoId = agendamento.MedicoId,
             PacienteId = agendamento.PacienteId,
             DataHoraConsulta = agendamento.DataHoraConsulta,

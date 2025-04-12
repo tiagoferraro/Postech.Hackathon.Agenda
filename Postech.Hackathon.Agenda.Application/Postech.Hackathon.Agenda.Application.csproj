@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Postech.Hackathon.Agenda.Infra\Postech.Hackathon.Agenda.Infra.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\Response\" />
-  </ItemGroup>
-
 </Project>

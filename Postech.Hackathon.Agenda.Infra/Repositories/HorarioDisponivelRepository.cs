@@ -11,17 +11,11 @@ public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSet
     public async Task<HorarioDisponivel> ObterPorIdAsync(Guid id)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "SELECT * FROM dbo.HorarioDisponivel WHERE IdHorarioDisponivel = @Id";
-        var horarioDisponivel = await connection.QueryFirstOrDefaultAsync<HorarioDisponivel>(sql, new { Id = id });
+        const string sql = "SELECT * FROM dbo.HorarioDisponivel WHERE horarioDisponivelId = @horarioDisponivelId";
+        var horarioDisponivel = await connection.QueryFirstOrDefaultAsync<HorarioDisponivel>(sql, new { horarioDisponivelId = id });
         return horarioDisponivel ?? throw new KeyNotFoundException($"Horário disponível com ID {id} não encontrado.");
     }
 
-    public async Task<IEnumerable<HorarioDisponivel>> ObterTodosAsync()
-    {
-        using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "SELECT * FROM dbo.HorarioDisponivel";
-        return await connection.QueryAsync<HorarioDisponivel>(sql);
-    }
 
     public async Task<IEnumerable<HorarioDisponivel>> ObterPorMedicoAsync(Guid medicoId)
     {
@@ -32,13 +26,7 @@ public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSet
 
         return await connection.QueryAsync<HorarioDisponivel>(sql, new { MedicoId = medicoId });
     }
-
-    public async Task<IEnumerable<HorarioDisponivel>> ObterPorDiaSemanaAsync(int diaSemana)
-    {
-        using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "SELECT * FROM dbo.HorarioDisponivel WHERE DiaSemana = @DiaSemana";
-        return await connection.QueryAsync<HorarioDisponivel>(sql, new { DiaSemana = diaSemana });
-    }
+   
 
     public async Task<IEnumerable<HorarioDisponivel>> ObterPorMedicoEDiaAsync(Guid medicoId, int diaSemana)
     {
@@ -54,8 +42,8 @@ public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSet
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
         const string sql = @"INSERT INTO dbo.HorarioDisponivel 
-                               (IdHorarioDisponivel, MedicoId, DiaSemana, Horas) 
-                               VALUES (@IdHorarioDisponivel, @MedicoId, @DiaSemana, @Horas)";
+                               (HorarioDisponivelId, MedicoId, DiaSemana, Horas) 
+                               VALUES (@HorarioDisponivelId, @MedicoId, @DiaSemana, @Horas)";
 
         var rows = await connection.ExecuteAsync(sql, horarioDisponivel);
         return rows > 0;
@@ -68,7 +56,7 @@ public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSet
                                SET MedicoId = @MedicoId, 
                                    DiaSemana = @DiaSemana, 
                                    Horas = @Horas 
-                               WHERE IdHorarioDisponivel = @IdHorarioDisponivel";
+                               WHERE HorarioDisponivelId = @HorarioDisponivelId";
 
         var rows = await connection.ExecuteAsync(sql, horarioDisponivel);
         return rows > 0;
@@ -77,7 +65,7 @@ public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSet
     public async Task<bool> DeletarAsync(Guid id)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = "DELETE FROM dbo.HorarioDisponivel WHERE IdHorarioDisponivel = @Id";
+        const string sql = "DELETE FROM dbo.HorarioDisponivel WHERE HorarioDisponivelId = @Id";
         var rows = await connection.ExecuteAsync(sql, new { Id = id });
         return rows > 0;
     }
@@ -95,14 +83,5 @@ public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSet
         return count > 0;
     }
 
-    public async Task<HorarioDisponivel> CriarAsync(HorarioDisponivel horario)
-    {
-        using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
-        const string sql = @"INSERT INTO dbo.HorarioDisponivel 
-                               (IdHorarioDisponivel, MedicoId, DiaSemana, Horas) 
-                               VALUES (@IdHorarioDisponivel, @MedicoId, @DiaSemana, @Horas)";
 
-        await connection.ExecuteAsync(sql, horario);
-        return horario;
-    }
 }

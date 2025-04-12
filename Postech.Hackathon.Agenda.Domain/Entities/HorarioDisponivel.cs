@@ -2,14 +2,14 @@ namespace Postech.Hackathon.Agenda.Domain.Entities;
 
 public class HorarioDisponivel
 {
-    public Guid IdHorarioDisponivel { get; private set; }
+    public Guid HorarioDisponivelId { get; private set; }
     public Guid MedicoId { get; private set; }
     public int DiaSemana { get; private set; }
     public TimeSpan Horas { get; private set; }
 
-    public HorarioDisponivel(Guid idHorarioDisponivel, Guid medicoId, int diaSemana, TimeSpan horas)
+    public HorarioDisponivel(Guid horarioDisponivelId, Guid medicoId, int diaSemana, TimeSpan horas)
     {      
-        IdHorarioDisponivel = idHorarioDisponivel;
+        HorarioDisponivelId = horarioDisponivelId;
         MedicoId = medicoId;
         DiaSemana = diaSemana;
         Horas = horas;
