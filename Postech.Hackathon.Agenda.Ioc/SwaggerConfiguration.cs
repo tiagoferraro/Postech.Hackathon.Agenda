@@ -16,7 +16,7 @@ public static class SwaggerConfiguration
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Postech Hackathon - GestorCadastro API",
+                Title = "Postech Hackathon - Agendamento API",
                 Version = "v1",
                 Description = "API de autorização para o Hackathon da Postech",
                 Contact = new OpenApiContact
@@ -71,7 +71,7 @@ public static class SwaggerConfiguration
         app.UseSwagger();
         app.UseSwaggerUI(c => 
         {
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Postech Hackathon GestorCadastro API v1");
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Postech Hackathon Agendamento API v1");
             c.RoutePrefix = string.Empty;
             c.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
         });
