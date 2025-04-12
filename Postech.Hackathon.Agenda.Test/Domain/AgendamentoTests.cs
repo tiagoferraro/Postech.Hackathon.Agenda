@@ -34,7 +34,7 @@ public class AgendamentoTests
         var justificativa = "Médico indisponível";
 
         // Act
-        agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico,justificativa);
+        agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico, justificativa);
 
         // Assert
         Assert.Equal(StatusAgendamento.RecusadoMedico, agendamento.StatusConsulta);
@@ -51,8 +51,31 @@ public class AgendamentoTests
         var justificativa = "Médico indisponível";
 
         // Act & Assert
-        var exception = Assert.Throws<InvalidOperationException>(() => agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico,justificativa));
+        var exception = Assert.Throws<InvalidOperationException>(() => agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico, justificativa));
         Assert.Equal("A consulta não pode ser recusada, pois já foi aprovada.", exception.Message);
+    }
+
+    [Fact]
+    public void RecusarConsulta_QuandoStatusIncorreto_DeveLancarExcecao()
+    {
+        // Arrange
+        var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddDays(1));
+        var justificativa = "Médico indisponível";
+
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => agendamento.RecusarConsulta(StatusAgendamento.Aprovado, justificativa));
+        Assert.Equal("status Incorreto", exception.Message);
+    }
+
+    [Fact]
+    public void RecusarConsulta_QuandoJustificativaVazia_DeveLancarExcecao()
+    {
+        // Arrange
+        var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddDays(1));
+
+        // Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico, ""));
+        Assert.Equal("A justificativa de cancelamento não pode ser nula ou vazia.", exception.Message);
     }
 
     [Fact]

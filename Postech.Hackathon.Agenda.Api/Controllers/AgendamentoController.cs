@@ -57,7 +57,7 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
     }
 
     [HttpPost("recusar")]
-    [Authorize(Roles = "Medico,Administrador")]
+    [Authorize(Roles = "Medico,Administrador,Paciente")]
     [ProducesResponseType(typeof(AgendamentoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType( StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]

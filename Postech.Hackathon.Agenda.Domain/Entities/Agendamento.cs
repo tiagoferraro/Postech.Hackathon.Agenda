@@ -41,6 +41,10 @@ public class Agendamento
         {
             throw new InvalidOperationException("status Incorreto");
         }
+        if (string.IsNullOrEmpty(justificativa))
+        {
+            throw new ArgumentException("A justificativa de cancelamento não pode ser nula ou vazia.");
+        }
 
         JustificativaCancelamento = justificativa;
         StatusConsulta = statusAgendamento;
