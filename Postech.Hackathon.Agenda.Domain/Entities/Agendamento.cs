@@ -25,15 +25,25 @@ public class Agendamento
         DataCadastro = DateTime.Now;
     }
     
-    public void RecusarConsulta(string justificativa)
+    public void RecusarConsulta(StatusAgendamento statusAgendamento,string justificativa)
     {
+
         if (StatusConsulta == StatusAgendamento.Aprovado)
         {
             throw new InvalidOperationException("A consulta não pode ser recusada, pois já foi aprovada.");
         }
+        var listaAgendamentosAceitos = new List<StatusAgendamento>
+        {
+            StatusAgendamento.RecusadoPaciente,
+            StatusAgendamento.RecusadoMedico
+        };
+        if (!listaAgendamentosAceitos.Contains(statusAgendamento))
+        {
+            throw new InvalidOperationException("status Incorreto");
+        }
 
         JustificativaCancelamento = justificativa;
-        StatusConsulta = StatusAgendamento.Recusado;
+        StatusConsulta = statusAgendamento;
         DataAlteracao = DateTime.Now;
     }
     public void AprovarConsulta()

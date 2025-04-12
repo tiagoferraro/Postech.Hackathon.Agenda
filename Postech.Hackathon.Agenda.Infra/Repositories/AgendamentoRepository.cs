@@ -78,7 +78,7 @@ public class AgendamentoRepository(IOptions<DatabaseSettings> _databaseSettings)
         {
             MedicoId = medicoId,
             DataHoraConsulta = dataHoraConsulta,
-            StatusRecusado = StatusAgendamento.Recusado
+            StatusRecusado = StatusAgendamento.RecusadoMedico
         });
 
         return count > 0;

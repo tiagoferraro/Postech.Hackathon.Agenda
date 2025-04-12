@@ -4,5 +4,6 @@ public enum StatusAgendamento
 {    
     AguardandoAprovacaoMedico = 1,
     Aprovado = 2,
-    Recusado = 3
+    RecusadoMedico = 3,
+    RecusadoPaciente = 4,
 } 

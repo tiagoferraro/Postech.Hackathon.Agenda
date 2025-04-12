@@ -1,6 +1,8 @@
-﻿namespace Postech.Hackathon.Agenda.Application.DTOs.Request;
+﻿using Postech.Hackathon.Agenda.Domain.Enums;
 
-public record AgendamentoRecusaRequest(Guid AgendamentoId,string Justificativa);
+namespace Postech.Hackathon.Agenda.Application.DTOs.Request;
+
+public record AgendamentoRecusaRequest(StatusAgendamento StatusAgendamento ,Guid AgendamentoId,string Justificativa);
 
 
 

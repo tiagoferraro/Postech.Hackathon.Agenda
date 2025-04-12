@@ -136,7 +136,7 @@ public class HorarioDisponivelServiceTests
 
         _mockHorarioDisponivelRepository
             .Setup(x => x.ObterPorIdAsync(horarioId))
-            .ReturnsAsync((HorarioDisponivel)null);
+            .ReturnsAsync((HorarioDisponivel?)null);
 
         // Act & Assert
         var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => 
@@ -151,8 +151,8 @@ public class HorarioDisponivelServiceTests
         var medicoId = Guid.NewGuid();
         var horarios = new List<HorarioDisponivel>
         {
-            new HorarioDisponivel(Guid.NewGuid(), medicoId, 1, new TimeSpan(9, 0, 0)),
-            new HorarioDisponivel(Guid.NewGuid(), medicoId, 2, new TimeSpan(14, 0, 0))
+            new(Guid.NewGuid(), medicoId, 1, new TimeSpan(9, 0, 0)),
+            new(Guid.NewGuid(), medicoId, 2, new TimeSpan(14, 0, 0))
         };
 
         _mockHorarioDisponivelRepository

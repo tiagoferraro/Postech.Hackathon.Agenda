@@ -8,7 +8,7 @@ namespace Postech.Hackathon.Agenda.Infra.Repositories;
 public class HorarioDisponivelRepository(IOptions<DatabaseSettings> _databaseSettings) : IHorarioDisponivelRepository
 {
 
-    public async Task<HorarioDisponivel> ObterPorIdAsync(Guid id)
+    public async Task<HorarioDisponivel?> ObterPorIdAsync(Guid id)
     {
         using var connection = new SqlConnection(_databaseSettings.Value.ConnectionString);
         const string sql = "SELECT * FROM dbo.HorarioDisponivel WHERE horarioDisponivelId = @horarioDisponivelId";

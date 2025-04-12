@@ -1,6 +1,6 @@
 using Postech.Hackathon.Agenda.Domain.Entities;
 
-namespace Postech.Hackathon.Agenda.Tests.Unit.Domain.Entities;
+namespace Postech.Hackathon.Agenda.Test.Domain;
 
 public class HorarioDisponivelTests
 {

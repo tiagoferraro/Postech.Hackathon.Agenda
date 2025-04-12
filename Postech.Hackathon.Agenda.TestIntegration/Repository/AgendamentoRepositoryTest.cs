@@ -2,6 +2,7 @@
 using Postech.Hackathon.Agenda.Domain.Entities;
 using Postech.Hackathon.Agenda.Domain.Enums;
 using Postech.Hackathon.Agenda.Infra.Repositories;
+using Postech.Hackathon.Agenda.TestIntegration.Repository.Fixture;
 using Xunit;
 
 namespace Postech.Hackathon.Agenda.TestIntegration.Repository
@@ -47,13 +48,13 @@ namespace Postech.Hackathon.Agenda.TestIntegration.Repository
             await _repository.InserirAsync(agendamento);
 
             // Act
-            agendamento.RecusarConsulta("Paciente desistiu");
+            agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico, "Paciente desistiu");
             var resultadoAtualizar = await _repository.AtualizarAsync(agendamento);
             var agendamentoAtualizado = await _repository.ObterPorIdAsync(agendamento.AgendamentoId);
 
             // Assert
             Assert.True(resultadoAtualizar);
-            Assert.Equal(StatusAgendamento.Recusado, agendamentoAtualizado.StatusConsulta);
+            Assert.Equal(StatusAgendamento.RecusadoMedico, agendamentoAtualizado.StatusConsulta);
             Assert.Equal("Paciente desistiu", agendamentoAtualizado.JustificativaCancelamento);
         }
 

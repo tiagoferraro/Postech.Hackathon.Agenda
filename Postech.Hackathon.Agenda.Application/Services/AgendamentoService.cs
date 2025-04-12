@@ -64,7 +64,7 @@ public class AgendamentoService(IAgendamentoRepository _agendamentoRepository) :
     {
         var agendamento = await _agendamentoRepository.ObterPorIdAsync(agendamentoRecusaRequest.AgendamentoId);
         
-        agendamento.RecusarConsulta(agendamentoRecusaRequest.Justificativa);
+        agendamento.RecusarConsulta(agendamentoRecusaRequest.StatusAgendamento, agendamentoRecusaRequest.Justificativa);
 
         await _agendamentoRepository.AtualizarAsync(agendamento);
     }

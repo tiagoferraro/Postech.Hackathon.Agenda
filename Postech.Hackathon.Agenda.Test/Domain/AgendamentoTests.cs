@@ -1,7 +1,7 @@
 using Postech.Hackathon.Agenda.Domain.Entities;
 using Postech.Hackathon.Agenda.Domain.Enums;
 
-namespace Postech.Hackathon.Agenda.Tests.Unit.Domain.Entities;
+namespace Postech.Hackathon.Agenda.Test.Domain;
 
 public class AgendamentoTests
 {
@@ -34,10 +34,10 @@ public class AgendamentoTests
         var justificativa = "Médico indisponível";
 
         // Act
-        agendamento.RecusarConsulta(justificativa);
+        agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico,justificativa);
 
         // Assert
-        Assert.Equal(StatusAgendamento.Recusado, agendamento.StatusConsulta);
+        Assert.Equal(StatusAgendamento.RecusadoMedico, agendamento.StatusConsulta);
         Assert.Equal(justificativa, agendamento.JustificativaCancelamento);
         Assert.NotNull(agendamento.DataAlteracao);
     }
@@ -51,7 +51,7 @@ public class AgendamentoTests
         var justificativa = "Médico indisponível";
 
         // Act & Assert
-        var exception = Assert.Throws<InvalidOperationException>(() => agendamento.RecusarConsulta(justificativa));
+        var exception = Assert.Throws<InvalidOperationException>(() => agendamento.RecusarConsulta(StatusAgendamento.RecusadoMedico,justificativa));
         Assert.Equal("A consulta não pode ser recusada, pois já foi aprovada.", exception.Message);
     }
 

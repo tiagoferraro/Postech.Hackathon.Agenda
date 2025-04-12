@@ -7,7 +7,7 @@ using Postech.Hackathon.Agenda.Domain.Enums;
 using Postech.Hackathon.Agenda.Infra.Interfaces;
 using Xunit;
 
-namespace Postech.Hackathon.Agenda.Tests.Unit.Application.Services;
+namespace Postech.Hackathon.Agenda.Test.Application;
 
 public class AgendamentoServiceTests
 {
@@ -98,8 +98,8 @@ public class AgendamentoServiceTests
         var dataFinal = DateTime.Now.AddDays(7);
         var agendamentos = new List<Agendamento>
         {
-            new Agendamento(medicoId, Guid.NewGuid(), DateTime.Now.AddDays(1)),
-            new Agendamento(medicoId, Guid.NewGuid(), DateTime.Now.AddDays(2))
+            new(medicoId, Guid.NewGuid(), DateTime.Now.AddDays(1)),
+            new(medicoId, Guid.NewGuid(), DateTime.Now.AddDays(2))
         };
 
         _mockAgendamentoRepository
@@ -139,7 +139,7 @@ public class AgendamentoServiceTests
         // Arrange
         var agendamentoId = Guid.NewGuid();
         var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddDays(1));
-        var request = new AgendamentoRecusaRequest(agendamentoId, "Médico indisponível")
+        var request = new AgendamentoRecusaRequest(StatusAgendamento.RecusadoMedico,agendamentoId, "Médico indisponível")
         {
             AgendamentoId = agendamentoId,
             Justificativa = "Médico indisponível"
@@ -157,7 +157,7 @@ public class AgendamentoServiceTests
         await _service.RecusarAsync(request);
 
         // Assert
-        Assert.Equal(StatusAgendamento.Recusado, agendamento.StatusConsulta);
+        Assert.Equal(StatusAgendamento.RecusadoMedico, agendamento.StatusConsulta);
         Assert.Equal(request.Justificativa, agendamento.JustificativaCancelamento);
     }
 
@@ -193,8 +193,8 @@ public class AgendamentoServiceTests
         var dataFinal = DateTime.Now.AddDays(7);
         var agendamentos = new List<Agendamento>
         {
-            new Agendamento(Guid.NewGuid(), pacienteId, DateTime.Now.AddDays(1)),
-            new Agendamento(Guid.NewGuid(), pacienteId, DateTime.Now.AddDays(2))
+            new(Guid.NewGuid(), pacienteId, DateTime.Now.AddDays(1)),
+            new(Guid.NewGuid(), pacienteId, DateTime.Now.AddDays(2))
         };
 
         _mockAgendamentoRepository

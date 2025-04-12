@@ -1,6 +1,6 @@
 using Testcontainers.MsSql;
 
-namespace Postech.Hackathon.Agenda.TestIntegration.Repository;
+namespace Postech.Hackathon.Agenda.TestIntegration.Repository.Fixture;
 
 public class AgendamentoDatabaseFixture : IAsyncLifetime
 {
