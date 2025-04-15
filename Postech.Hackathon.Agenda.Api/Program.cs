@@ -5,6 +5,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using Postech.Hackathon.Agenda.Api.Settings;
+using Postech.Hackathon.Agenda.Infra.Settings;
 using Postech.Hackathon.Agenda.Ioc;
 using Prometheus;
 using System.Text;
@@ -42,7 +43,7 @@ builder.Services.AddOpenTelemetry()
 builder.Services.UseHttpClientMetrics();
 
 
-// Configurar autenticação JWT
+// Configurar autenticaï¿½ï¿½o JWT
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["SecretKey"];
 
@@ -66,7 +67,7 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-// Registrar serviços
+// Registrar serviï¿½os
 builder.Services.AddServices(builder.Configuration);
 
 var app = builder.Build();
@@ -77,12 +78,12 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-// Adicionar middleware de tratamento de exceções global
+// Adicionar middleware de tratamento de exceï¿½ï¿½es global
 app.UseGlobalExceptionHandler();
 
 app.UseHttpsRedirection();
 
-// Adicionar middleware de autenticação
+// Adicionar middleware de autenticaï¿½ï¿½o
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Options;
 using Postech.Hackathon.Agenda.Domain.Entities;
 using Postech.Hackathon.Agenda.Infra.Repositories;
+using Postech.Hackathon.Agenda.Infra.Settings;
 using Postech.Hackathon.Agenda.TestIntegration.Repository.Fixture;
 using Xunit;
 

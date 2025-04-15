@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Postech.Hackathon.Agenda.Domain.Entities;
 using Postech.Hackathon.Agenda.Domain.Enums;
 using Postech.Hackathon.Agenda.Infra.Interfaces;
+using Postech.Hackathon.Agenda.Infra.Settings;
 
 namespace Postech.Hackathon.Agenda.Infra.Repositories;
 

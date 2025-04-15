@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using Postech.Hackathon.Agenda.Application.DTOs.Request;
 using Postech.Hackathon.Agenda.Application.DTOs.Response;
@@ -12,11 +13,13 @@ public class HorarioDisponivelServiceTests
 {
     private readonly Mock<IHorarioDisponivelRepository> _mockHorarioDisponivelRepository;
     private readonly HorarioDisponivelService _service;
+    private readonly Mock<IDistributedCache> _mockCache;
 
     public HorarioDisponivelServiceTests()
     {
         _mockHorarioDisponivelRepository = new Mock<IHorarioDisponivelRepository>();
-        _service = new HorarioDisponivelService(_mockHorarioDisponivelRepository.Object);
+        _mockCache = new Mock<IDistributedCache>();
+        _service = new HorarioDisponivelService(_mockHorarioDisponivelRepository.Object,_mockCache.Object);
     }
 
     [Fact]

@@ -1,4 +1,4 @@
-﻿namespace Postech.Hackathon.Agenda.Infra.Repositories;
+﻿namespace Postech.Hackathon.Agenda.Infra.Settings;
 
 public class DatabaseSettings
 {
