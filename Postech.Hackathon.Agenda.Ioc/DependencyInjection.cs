@@ -17,6 +17,13 @@ public static class DependencyInjection
         services.AddScoped<IHorarioDisponivelRepository, HorarioDisponivelRepository>();
         services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 
+        // Redis
+        var redisSettings = configuration.GetSection("RedisSettings").Get<RedisSettings>();
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = redisSettings?.ConnectionString;
+            options.InstanceName = redisSettings?.InstanceName;
+        });
 
         services.AddScoped<IHorarioDisponivelService, HorarioDisponivelService>();
         services.AddScoped<IAgendamentoService, AgendamentoService>();
