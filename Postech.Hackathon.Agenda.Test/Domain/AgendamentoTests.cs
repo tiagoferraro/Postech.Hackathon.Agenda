@@ -92,16 +92,7 @@ public class AgendamentoTests
         Assert.NotNull(agendamento.DataAlteracao);
     }
 
-    [Fact]
-    public void AprovarConsulta_QuandoDataPassada_DeveLancarExcecao()
-    {
-        // Arrange
-        var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddDays(-1));
 
-        // Act & Assert
-        var exception = Assert.Throws<InvalidOperationException>(() => agendamento.AprovarConsulta());
-        Assert.Equal("A consulta não pode ser aprovada, pois a data e hora já passaram.", exception.Message);
-    }
 
     [Fact]
     public void AprovarConsulta_QuandoStatusNaoAguardandoAprovacao_DeveLancarExcecao()
@@ -114,5 +105,16 @@ public class AgendamentoTests
         var exception = Assert.Throws<InvalidOperationException>(() => agendamento.AprovarConsulta());
         Assert.Equal("A consulta não pode ser aprovada, pois não está aguardando aprovação do médico.", exception.Message);
     }
-    
+    [Fact]
+    public void Construtor_QuandoDataHoraConsultaNoPassado_DeveLancarExcecao()
+    {
+        // Arrange
+        var medicoId = Guid.NewGuid();
+        var pacienteId = Guid.NewGuid();
+        var dataHoraConsulta = DateTime.Now.AddDays(-1);
+        // Act & Assert
+        var exception = Assert.Throws<InvalidOperationException>(() => new Agendamento(medicoId, pacienteId, dataHoraConsulta));
+        Assert.Equal("A data e hora da consulta não podem ser no passado.", exception.Message);
+    }
+
 } 

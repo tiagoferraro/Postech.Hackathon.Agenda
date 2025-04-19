@@ -27,7 +27,7 @@ namespace Postech.Hackathon.Agenda.TestIntegration.Repository
         public async Task Deve_Inserir_E_Obter_Agendamento_Com_Sucesso()
         {
             // Arrange
-            var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddDays(1));
 
             // Act
             var resultadoInserir = await _repository.InserirAsync(agendamento);
@@ -45,7 +45,7 @@ namespace Postech.Hackathon.Agenda.TestIntegration.Repository
         public async Task Deve_Atualizar_Agendamento_Com_Sucesso()
         {
             // Arrange
-            var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now);
+            var agendamento = new Agendamento(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddDays(1) );
             await _repository.InserirAsync(agendamento);
 
             // Act
@@ -110,7 +110,7 @@ namespace Postech.Hackathon.Agenda.TestIntegration.Repository
         {
             // Arrange
             var medicoId = Guid.NewGuid();
-            var dataHoraConsulta = DateTime.Now;
+            var dataHoraConsulta = DateTime.Now.AddDays(1);
             var agendamento = new Agendamento(medicoId, Guid.NewGuid(), dataHoraConsulta);
             await _repository.InserirAsync(agendamento);
 
