@@ -23,6 +23,11 @@ public class Agendamento
         DataHoraConsulta = dataHoraConsulta;
         StatusConsulta = StatusAgendamento.AguardandoAprovacaoMedico;        
         DataCadastro = DateTime.Now;
+
+        if(DataHoraConsulta < DateTime.Now)
+        {
+            throw new InvalidOperationException("A data e hora da consulta não podem ser no passado.");
+        }
     }
     
     public void RecusarConsulta(StatusAgendamento statusAgendamento,string justificativa)

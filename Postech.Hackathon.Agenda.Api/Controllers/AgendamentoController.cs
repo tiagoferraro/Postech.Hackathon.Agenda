@@ -24,7 +24,7 @@ public class AgendamentoController(IAgendamentoService _agendamentoService) : Co
     }
 
     [HttpPost]
-    [Authorize(Roles = "Medico,Administrador")]
+    [Authorize]
     [ProducesResponseType(typeof(AgendamentoResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(ApiErrorResponse), StatusCodes.Status400BadRequest)]
